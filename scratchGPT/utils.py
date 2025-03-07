@@ -61,12 +61,9 @@ class Dataset:
     
     def get_batch(self):
         idx = torch.randint(0, len(self) - self.batch_size)
-        x_batch, y_batch = [], []
-        for i in range(self.batch_size):
-            x, y = self[idx + i]
-            x_batch.append(x)
-            y_batch.append(y)
-        return torch.stack(x_batch), torch.stack(y_batch)
+        x_batch = torch.stack([self[idx + i][0] for i in range(self.batch_size)])
+        y_batch = torch.stack([self[idx + i][1] for i in range(self.batch_size)])
+        return x_batch, y_batch
         
     def train_val_split(self, train_size=0.9):
         train_size = int(len(self.data) * train_size)
